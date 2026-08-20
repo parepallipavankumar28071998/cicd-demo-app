@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Shortener</title>
+  <style>
+    body { font-family: Arial; max-width: 500px; margin: 60px auto; text-align: center; }
+    input { width: 70%; padding: 8px; }
+    button { padding: 8px 16px; }
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>URL Shortener</h2>
+  <input id="urlInput" placeholder="Enter a URL" />
+  <button onclick="shorten()">Shorten</button>
+  <div id="result"></div>
+
+  <script>
+    async function shorten() {
+      const url = document.getElementById("urlInput").value;
+      const res = await fetch("/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+      const data = await res.json();
+      if (data.short_code) {
+        const short = window.location.origin + "/" + data.short_code;
+        document.getElementById("result").innerHTML = "Short URL: <a href='" + short + "'>" + short + "</a>";
+      } else {
+        document.getElementById("result").innerText = "Error: " + data.error;
+      }
+    }
+  </script>
+</body>
+</html>
