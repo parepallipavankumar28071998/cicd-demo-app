@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, render_template
 import sqlite3, string, random
 
 app = Flask(__name__)
@@ -12,6 +12,10 @@ def init_db():
 
 def make_code():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=6))
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 @app.route("/health")
 def health():
